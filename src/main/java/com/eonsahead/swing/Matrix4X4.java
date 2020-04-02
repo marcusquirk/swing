@@ -2,11 +2,11 @@ package com.eonsahead.swing;
 
 /**
  * A class to model a 4X4 vector.
- * 
- * For the most part, I rewrote this class from the ground-up, so as to 
- * "learn through my fingers" once again. I did this primarily for key methods
- * such as multiply. I am adding the rotation around the axes also.
- * 
+ *
+ * For the most part, I rewrote this class from the ground-up, so as to "learn
+ * through my fingers" once again. I did this primarily for key methods such as
+ * multiply. I am adding the rotation around the axes also.
+ *
  * @author marcus
  */
 public final class Matrix4X4 {
@@ -61,22 +61,22 @@ public final class Matrix4X4 {
         result.append(" ]");
         return result.toString();
     } // toString()
-    
-    public Matrix4X4 multiply(Matrix4X4 otherMatrix){
+
+    public Matrix4X4 multiply(Matrix4X4 otherMatrix) {
         Matrix4X4 product = new Matrix4X4();
-        for (int i=0; i<4; i++){
-            for(int j=0; j<4; j++){
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
                 double sum = 0.0;
-                for(int k=0; k<4; k++){
-                    sum += this.get(i, k)*otherMatrix.get(k, j);
+                for (int k = 0; k < 4; k++) {
+                    sum += this.get(i, k) * otherMatrix.get(k, j);
                 }
-                product.set(i,j,sum);
+                product.set(i, j, sum);
             }
         }
         return product;
     }
-    
-        public static void main(String[] args) {
+
+    public static void main(String[] args) {
         Matrix4X4 identity = new Matrix4X4();
         System.out.println("identity = " + identity);
 
@@ -94,13 +94,38 @@ public final class Matrix4X4 {
         Matrix4X4 netRotation = ccw.multiply(cw);
         System.out.println("net rotation = " + netRotation);
     } // main( String [] )
-        
-        public void rotationZ(double angle) {
+
+    public void rotationZ(double angle) {
         this.identity();
         this.set(0, 0, Math.cos(angle));
         this.set(0, 1, -Math.sin(angle));
         this.set(1, 0, Math.sin(angle));
         this.set(1, 1, Math.cos(angle));
     } // rotationZ( double )
+    
+    public void rotationX(double angle){
+        this.identity();
+        this.set(1, 1, Math.cos(angle));
+        this.set(1, 2, -Math.sin(angle));
+        this.set(2, 1, Math.sin(angle));
+        this.set(2, 2, Math.cos(angle));
+    }
+    
+    
+    public void rotationY(double angle){
+        this.identity();
+        this.set(0, 0, Math.cos(angle));
+        this.set(0, 2, Math.sin(angle));
+        this.set(2, 0, -Math.sin(angle));
+        this.set(2, 2, Math.cos(angle));
+    }
+    
+    public void scale(double factorX, double factorY, double factorZ){
+        this.identity();
+        this.set(0, 0, factorX);
+        this.set(1, 1, factorY);
+        this.set(2, 2, factorZ);
+    }
+
 
 }//class
