@@ -76,6 +76,23 @@ public final class Matrix4X4 {
         return product;
     }
 
+    public Vector multiplyVector (Vector vector) {
+        double[] vectorValues = new double[4];
+        for (int i = 0; i < 4; i++) {
+            double sum = 0.0;
+            for (int k =0; k<4; k++) {
+                sum += this.get(i, k) * vector.getU1();
+                sum += this.get(i, k) * vector.getU2();
+                sum += this.get(i, k) * vector.getU3();
+                sum += this.get(i, k) * vector.getU4();
+            } // for k
+            vectorValues[i] = sum;
+        } // for i
+        return new Vector(vectorValues[0], vectorValues[1], vectorValues[2],
+                vectorValues[3]);
+    } // multiply( Vector )
+
+
     public static void main(String[] args) {
         Matrix4X4 identity = new Matrix4X4();
         System.out.println("identity = " + identity);
