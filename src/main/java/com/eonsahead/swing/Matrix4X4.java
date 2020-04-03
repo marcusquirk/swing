@@ -39,6 +39,7 @@ public final class Matrix4X4 {
 
     /**
      * Sets an element in a 4X4 matrix to a given value
+     *
      * @param row The row of the element
      * @param column The column of the element
      * @param value The value to set.
@@ -49,7 +50,7 @@ public final class Matrix4X4 {
 
     /**
      * Returns the value in a certain element.
-     * 
+     *
      * @param row The row of the element
      * @param column The column of the element
      * @return The value in the element
@@ -60,7 +61,7 @@ public final class Matrix4X4 {
 
     /**
      * Returns a row in string form
-     * 
+     *
      * @row The row to convert to string
      * @return The row in string form.
      */
@@ -78,7 +79,7 @@ public final class Matrix4X4 {
 
     /**
      * Returns the matrix in string form
-     * 
+     *
      * @return The string form of the matrix
      */
     @Override
@@ -94,7 +95,7 @@ public final class Matrix4X4 {
 
     /**
      * Multiplies two matrices together.
-     * 
+     *
      * @param otherMatrix The other matrix to multiply with
      * @return The product matrix.
      */
@@ -114,15 +115,15 @@ public final class Matrix4X4 {
 
     /**
      * Multiplies the matrix with a vector.
-     * 
+     *
      * @param vector The vector to multiply with
      * @return The product vector.
      */
-    public Vector multiply (Vector vector) {
+    public Vector multiply(Vector vector) {
         double[] vectorValues = new double[4];
         for (int i = 0; i < 4; i++) {
             double sum = 0.0;
-            for (int k = 0; k<4; k++) {
+            for (int k = 0; k < 4; k++) {
                 sum += this.get(i, k) * vector.get(k);
             } // for k
             vectorValues[i] = sum;
@@ -130,7 +131,6 @@ public final class Matrix4X4 {
         return new Vector(vectorValues[0], vectorValues[1], vectorValues[2],
                 vectorValues[3]);
     } // multiply( Vector )
-
 
     public static void main(String[] args) {
         Matrix4X4 identity = new Matrix4X4();
@@ -153,7 +153,7 @@ public final class Matrix4X4 {
 
     /**
      * Rotates the matrix about the z axis by a given angle.
-     * 
+     *
      * @param angle The angle to rotate by.
      */
     public void rotationZ(double angle) {
@@ -163,46 +163,60 @@ public final class Matrix4X4 {
         this.set(1, 0, Math.sin(angle));
         this.set(1, 1, Math.cos(angle));
     } // rotationZ( double )
-    
+
     /**
      * Rotates the matrix about the x axis by a given angle.
-     * 
+     *
      * @param angle The angle to rotate by.
      */
-    public void rotationX(double angle){
+    public void rotationX(double angle) {
         this.identity();
         this.set(1, 1, Math.cos(angle));
         this.set(1, 2, -Math.sin(angle));
         this.set(2, 1, Math.sin(angle));
         this.set(2, 2, Math.cos(angle));
     }
-    
+
     /**
      * Rotates the matrix about the y axis by a given angle.
-     * 
+     *
      * @param angle The angle to rotate by.
      */
-    public void rotationY(double angle){
+    public void rotationY(double angle) {
         this.identity();
         this.set(0, 0, Math.cos(angle));
         this.set(0, 2, Math.sin(angle));
         this.set(2, 0, -Math.sin(angle));
         this.set(2, 2, Math.cos(angle));
     }
-    
+
     /**
      * Turns the matrix into a scaling matrix.
-     * 
+     *
      * @param factorX The x direction scale factor.
      * @param factorY The y direction scale factor.
      * @param factorZ The z direction scale factor.
      */
-    public void scale(double factorX, double factorY, double factorZ){
+    public void scale(double factorX, double factorY, double factorZ) {
         this.identity();
         this.set(0, 0, factorX);
         this.set(1, 1, factorY);
         this.set(2, 2, factorZ);
     }
 
+    /**
+     * Turns the matrix into a translation matrix
+     *
+     * @param translateX Translation in the x direction.
+     * @param translateY Translation in the y direction.
+     * @param translateZ Translation in the z direction.
+     */
+    public void translate(double translateX, double translateY,
+            double translateZ) {
+        this.identity();
+        this.set(0, 3, translateX);
+        this.set(1, 3, translateY);
+        this.set(2, 3, translateZ);
+    }
 
 }//class
