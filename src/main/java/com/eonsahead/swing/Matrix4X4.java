@@ -76,15 +76,12 @@ public final class Matrix4X4 {
         return product;
     }
 
-    public Vector multiplyVector (Vector vector) {
+    public Vector multiply (Vector vector) {
         double[] vectorValues = new double[4];
         for (int i = 0; i < 4; i++) {
             double sum = 0.0;
-            for (int k =0; k<4; k++) {
-                sum += this.get(i, k) * vector.get(0);
-                sum += this.get(i, k) * vector.get(1);
-                sum += this.get(i, k) * vector.get(2);
-                sum += this.get(i, k) * vector.get(3);
+            for (int k = 0; k<4; k++) {
+                sum += this.get(i, k) * vector.get(k);
             } // for k
             vectorValues[i] = sum;
         } // for i
