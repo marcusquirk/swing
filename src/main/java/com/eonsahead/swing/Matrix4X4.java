@@ -81,10 +81,10 @@ public final class Matrix4X4 {
         for (int i = 0; i < 4; i++) {
             double sum = 0.0;
             for (int k =0; k<4; k++) {
-                sum += this.get(i, k) * vector.getU1();
-                sum += this.get(i, k) * vector.getU2();
-                sum += this.get(i, k) * vector.getU3();
-                sum += this.get(i, k) * vector.getU4();
+                sum += this.get(i, k) * vector.get(0);
+                sum += this.get(i, k) * vector.get(1);
+                sum += this.get(i, k) * vector.get(2);
+                sum += this.get(i, k) * vector.get(3);
             } // for k
             vectorValues[i] = sum;
         } // for i
