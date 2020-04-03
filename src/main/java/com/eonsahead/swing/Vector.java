@@ -47,7 +47,7 @@ public class Vector {
     public Vector rotateX(double angle) {
         Matrix4X4 rotationMatrix = new Matrix4X4();
         rotationMatrix.rotationX(angle);
-        return rotationMatrix.multiplyVector(this);
+        return rotationMatrix.multiply(this);
     } // rotate( double )
 
     public double dot(Vector v) {
@@ -86,6 +86,8 @@ public class Vector {
         return new Vector(this.get(0) / magnitude, this.get(1) / magnitude,
                 this.get(2) / magnitude, this.get(3) / magnitude);
     }
+    
+    
 
     @Override
     public String toString() {
@@ -93,10 +95,18 @@ public class Vector {
                 + ")";
     } // toString()
     
-    public void main(){
+    public static void main(String[] args){
         Vector v1 = new Vector(7,8,2,0);
+        Matrix4X4 m1 = new Matrix4X4();
+        m1.set(1,3,7);
+        m1.set(3,1,6);
+        m1.set(2,3,-3);
         Vector v2 = v1.normalise();
-        System.out.print(v2);
+        System.out.println(v2);
+        System.out.println(v2.magnitude());
+        System.out.println(m1);
+        System.out.println(v1);
+        System.out.println(m1.multiply(v1));
     }
 
 } // Vector
