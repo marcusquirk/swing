@@ -87,7 +87,12 @@ public class Vector {
                 this.get(2) / magnitude, this.get(3) / magnitude);
     }
     
-    
+    public Vector cross(Vector v) {
+        double newU0 = this.get(1)*v.get(2)-this.get(2)*v.get(1);
+        double newU1 = this.get(2)*v.get(0)-this.get(0)*v.get(2);
+        double newU2 = this.get(0)*v.get(1)-this.get(1)*v.get(0);
+        return new Vector(newU0, newU1, newU2);
+    }
 
     @Override
     public String toString() {
@@ -107,6 +112,8 @@ public class Vector {
         System.out.println(m1);
         System.out.println(v1);
         System.out.println(m1.multiply(v1));
+        Vector v3 = new Vector(3,2,7);
+        System.out.println(v1.cross(v3));
     }
 
 } // Vector
