@@ -18,7 +18,7 @@ public class SwingPanel extends JPanel implements ActionListener {
     private double centerX = 0.0;
     private double centerY = 0.0;
     private double radius = 0.5;
-    private Color color = Color.red;
+    private Color colour = Color.red;
     
     public SwingPanel() { 
         Timer timer = new Timer( 50, this );
@@ -49,13 +49,13 @@ public class SwingPanel extends JPanel implements ActionListener {
         this.radius = r;
     } // setRadius( double )
     
-    public Color getColor() {
-        return this.color;
-    } // getColor()
+    public Color getColour() {
+        return this.colour;
+    } // getColour()
     
-    public void setColor( Color c ) {
-        this.color = c;
-    } // setColor( Color )
+    public void setColour( Color c ) {
+        this.colour = c;
+    } // setColour( Color )
     
     @Override
     public void paintComponent( Graphics g ) {
@@ -85,7 +85,7 @@ public class SwingPanel extends JPanel implements ActionListener {
         Ellipse2D.Double circle = new Ellipse2D.Double( ulx, uly, d, d );
         
         Shape shape = transform.createTransformedShape(circle);
-        g2D.setColor( Color.red );
+        // g2D.setColor( Color.red );
         g2D.fill( shape );    
     } // paintComponent( Graphics )
 
@@ -96,7 +96,7 @@ public class SwingPanel extends JPanel implements ActionListener {
         // Move? In which direction? How much?
         // Make bigger? Or make smaller?
         // Rotate? (There's an AffineTransform for that, too.)
-        // Change color?
+        // Change colour?
         
         this.centerY = this.centerY + 0.02;
         if( this.centerY > 0.5 ) {
@@ -104,5 +104,6 @@ public class SwingPanel extends JPanel implements ActionListener {
         } // if
         this.repaint();
     } // actionPerformed( ActionEvent )
+    
     
 } // SwingPanel
