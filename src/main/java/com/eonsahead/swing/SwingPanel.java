@@ -13,6 +13,20 @@ import java.util.Random;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+/**
+ * A JPanel that models a bouncing shape, including a gravitational constant, a
+ * damping constant, and the methods describing the shape bouncing off of the
+ * frame boundaries; the coordinate system -1 to 1 has been removed.
+ *
+ * The velocity of the shape is randomly initialised. Gravity is initialised to
+ * 1. Damping is initialised to 1.
+ *
+ * Note that damping only applies to the 'floor' of the frame. I chose to do
+ * this because shapes that bounced freely off the walls without damping were
+ * more interesting to watch.
+ *
+ * @author marcus
+ */
 public class SwingPanel extends JPanel implements ActionListener {
 
     Random rng = new Random();
@@ -27,6 +41,10 @@ public class SwingPanel extends JPanel implements ActionListener {
     private Color colour = Color.red;
     private String shapeDraw = "Circle";
 
+    /**
+     * Initialises the Timer, and creates a randomly-generated velocity. The
+     * shape's x and y velocity components are independent.
+     */
     public SwingPanel() {
         Timer timer = new Timer(30, this);
         timer.start();
@@ -69,17 +87,31 @@ public class SwingPanel extends JPanel implements ActionListener {
     public void setShape(String s) {
         this.shapeDraw = s;
     }
-    
-    public void setDirection(){
+
+    /**
+     * Create a new random velocity for the shape, with independent x and y
+     * components.
+     */
+    public void setDirection() {
         direction[0] = -7.142 + (rng.nextDouble() / 0.07);
         direction[1] = -7.142 + (rng.nextDouble() / 0.07);
     }
-    
-    public void setGravity(double g){
+
+    /**
+     * Set gravity to a given g.
+     *
+     * @param g The chosen gravitational constant.
+     */
+    public void setGravity(double g) {
         gravity = g;
     }
-    
-    public void setDamping(double d){
+
+    /**
+     * Set damping to a given d.
+     *
+     * @param d The chosen damping constant.
+     */
+    public void setDamping(double d) {
         damping = d;
     }
 
@@ -92,6 +124,14 @@ public class SwingPanel extends JPanel implements ActionListener {
         int h = this.getHeight();
 
         AffineTransform transform = new AffineTransform();
+        
+        /*
+        This code creates a -1 to 1 x-y coordinate system. Should you choose to
+        re-implement it, all of the initial variables such as centerX, centerY,
+        direction, and g must all be changed to more suitable values (likely
+        very small, around 0.0-0.2)
+         */
+        
 //        AffineTransform scaling = new AffineTransform();
 //        scaling.setToScale(w / 2, h / 2);
 //        AffineTransform translation = new AffineTransform();
@@ -99,6 +139,7 @@ public class SwingPanel extends JPanel implements ActionListener {
 
 //        transform.concatenate(scaling);
 //        transform.concatenate(translation);
+
         if (shapeDraw == "Circle") {
             double d = this.radius;
             double ulx = this.centerX;
@@ -127,30 +168,31 @@ public class SwingPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-
+        // Each time tick, the shape moves in the direction set.
         this.centerY = this.centerY + (direction[0]);
         this.centerX = this.centerX + (direction[1]);
-        if (this.centerY + 4*radius > 600) {
-            centerY = 600-4*radius;
-            direction[0] = -direction[0] + damping;
-            rotationSpeed = - rotationSpeed;
+        
+        //These describe situations for the shape to bounce off of a boundary
+        if (this.centerY + 4 * radius > 600) {
+            centerY = 600 - 4 * radius;
+            direction[0] = -direction[0] + damping; //bounce
+            rotationSpeed = -rotationSpeed;
         } // if
         else if (this.centerY + radius < 0) {
             centerY = -radius;
             direction[0] = -direction[0];
-            rotationSpeed = - rotationSpeed;
+            rotationSpeed = -rotationSpeed;
         } // if
         if (this.centerX + radius > 600) {
-            centerX = 600-radius;
+            centerX = 600 - radius;
             direction[1] = -direction[1];
-            rotationSpeed = - rotationSpeed;
-        }
-        else if (this.centerX < 0) {
+            rotationSpeed = -rotationSpeed;
+        } else if (this.centerX < 0) {
             centerX = 0;
             direction[1] = -direction[1];
-            rotationSpeed = - rotationSpeed;
+            rotationSpeed = -rotationSpeed;
         }
-        direction[0] += gravity/2;
+        direction[0] += gravity / 2; // each time tick, apply the g force
         this.repaint();
     } // actionPerformed( ActionEvent )
 
