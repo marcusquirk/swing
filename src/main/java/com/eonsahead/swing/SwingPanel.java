@@ -15,19 +15,23 @@ import javax.swing.Timer;
 
 public class SwingPanel extends JPanel implements ActionListener {
 
-    private double centerX = 0.0;
-    private double centerY = 0.0;
-    private double radius = 0.2;
+    Random rng = new Random();
+    private double centerX = 300;
+    private double centerY = 100;
+    private double gravity = 1.0;
+    private double damping = 1.0;
+    private double radius = 15;
+    private double rotationAngle = 0.0;
+    private double rotationSpeed = 0.05 + (rng.nextDouble() / 10);
     private final double[] direction = new double[2];
     private Color colour = Color.red;
     private String shapeDraw = "Circle";
-    Random rng = new Random();
 
     public SwingPanel() {
         Timer timer = new Timer(30, this);
         timer.start();
-        direction[0] = 0.005 + (rng.nextDouble() / 40);
-        direction[1] = 0.005 + (rng.nextDouble() / 40);
+        direction[0] = -7.142 + (rng.nextDouble() / 0.07);
+        direction[1] = -7.142 + (rng.nextDouble() / 0.07);
     } // SwingPanel()
 
     public double getCenterX() {
@@ -61,9 +65,22 @@ public class SwingPanel extends JPanel implements ActionListener {
     public void setColour(Color c) {
         this.colour = c;
     } // setColour( Color )
-    
-    public void setShape(String s){
+
+    public void setShape(String s) {
         this.shapeDraw = s;
+    }
+    
+    public void setDirection(){
+        direction[0] = -7.142 + (rng.nextDouble() / 0.07);
+        direction[1] = -7.142 + (rng.nextDouble() / 0.07);
+    }
+    
+    public void setGravity(double g){
+        gravity = g;
+    }
+    
+    public void setDamping(double d){
+        damping = d;
     }
 
     @Override
@@ -75,31 +92,36 @@ public class SwingPanel extends JPanel implements ActionListener {
         int h = this.getHeight();
 
         AffineTransform transform = new AffineTransform();
-        AffineTransform scaling = new AffineTransform();
-        scaling.setToScale(w / 2, h / 2);
-        AffineTransform translation = new AffineTransform();
-        translation.setToTranslation(1.0 - radius / 2, 1.0 - radius / 2);
+//        AffineTransform scaling = new AffineTransform();
+//        scaling.setToScale(w / 2, h / 2);
+//        AffineTransform translation = new AffineTransform();
+//        translation.setToTranslation(1.0, 1.0);
 
-        transform.concatenate(scaling);
-        transform.concatenate(translation);
-
+//        transform.concatenate(scaling);
+//        transform.concatenate(translation);
         if (shapeDraw == "Circle") {
             double d = this.radius;
             double ulx = this.centerX;
             double uly = this.centerY;
-            Ellipse2D.Double circle = new Ellipse2D.Double(ulx, uly, d, d * 2);
+            Ellipse2D.Double circle = new Ellipse2D.Double(ulx, uly, d, d);
 
             Shape shape = transform.createTransformedShape(circle);
             g2D.setColor(colour);
             g2D.fill(shape);
         }//if
-        else if (shapeDraw == "Square"){
+        else if (shapeDraw == "Square") {
+            rotationAngle += rotationSpeed;
             Rectangle2D.Double square = new Rectangle2D.Double(centerX, centerY,
-                    radius, radius*2);
-            Shape shape = transform.createTransformedShape(square);
+                    radius, radius);
+//            Shape shape = transform.createTransformedShape(square);
+//            g2D.setColor(colour);
+//            g2D.fill(shape);
+            AffineTransform at = AffineTransform.getRotateInstance(rotationAngle, centerX, centerY);
+            Shape shape = at.createTransformedShape(square);
+            shape = transform.createTransformedShape(shape);
             g2D.setColor(colour);
             g2D.fill(shape);
-            
+
         }
     } // paintComponent( Graphics )
 
@@ -108,12 +130,27 @@ public class SwingPanel extends JPanel implements ActionListener {
 
         this.centerY = this.centerY + (direction[0]);
         this.centerX = this.centerX + (direction[1]);
-        if (Math.abs(this.centerY + radius) > 1) {
-            direction[0] = -direction[0];
+        if (this.centerY + 4*radius > 600) {
+            centerY = 600-4*radius;
+            direction[0] = -direction[0] + damping;
+            rotationSpeed = - rotationSpeed;
         } // if
-        if (Math.abs(this.centerX) > 1) {
+        else if (this.centerY + radius < 0) {
+            centerY = -radius;
+            direction[0] = -direction[0];
+            rotationSpeed = - rotationSpeed;
+        } // if
+        if (this.centerX + radius > 600) {
+            centerX = 600-radius;
             direction[1] = -direction[1];
+            rotationSpeed = - rotationSpeed;
         }
+        else if (this.centerX < 0) {
+            centerX = 0;
+            direction[1] = -direction[1];
+            rotationSpeed = - rotationSpeed;
+        }
+        direction[0] += gravity/2;
         this.repaint();
     } // actionPerformed( ActionEvent )
 
