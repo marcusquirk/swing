@@ -33,22 +33,10 @@ public class Swing extends JFrame implements ActionListener {
         pane.add(panel);
 
         Random rng = new Random();
-        for (int i = 0; i < NUMBER_OF_COLOURS; i++) {
-            int red = 64 + rng.nextInt(128);
-            int green = 64 + rng.nextInt(128);
-            int blue = 64 + rng.nextInt(128);
-            Color colour = new Color(red, green, blue);
-            palette.add(colour);
-        } // for
+        randomColours(rng, palette);
         this.panel.setBackground(palette.get(0));
 
-        for (int i = 0; i < NUMBER_OF_COLOURS; i++) {
-            int red = rng.nextInt(256);
-            int green = rng.nextInt(256);
-            int blue = rng.nextInt(256);
-            Color colour = new Color(red, green, blue);
-            foregroundPalette.add(colour);
-        } // for
+        randomColours(rng, foregroundPalette);
         this.panel.setColour(foregroundPalette.get(0));
 
         JMenuBar menuBar = new JMenuBar();
@@ -115,6 +103,16 @@ public class Swing extends JFrame implements ActionListener {
 
         this.setVisible(true);
     } // Swing()
+    
+    public void randomColours(Random rng, List<Color> palette){
+        for (int i = 0; i < NUMBER_OF_COLOURS; i++) {
+            int red = 64 + rng.nextInt(128);
+            int green = 64 + rng.nextInt(128);
+            int blue = 64 + rng.nextInt(128);
+            Color colour = new Color(red, green, blue);
+            palette.add(colour);
+        } // for
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
