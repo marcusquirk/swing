@@ -15,10 +15,10 @@ import javax.swing.JPanel;
 
 public class Swing extends JFrame implements ActionListener {
 
-    private final int FRAME_WIDTH = 800;
-    private final int FRAME_HEIGHT = 400;
+    private final int FRAME_WIDTH = 600;
+    private final int FRAME_HEIGHT = 600;
     private final String FRAME_TITLE = "Swing";
-    private final int NUMBER_OF_COLOURS = 12;
+    private final int NUMBER_OF_COLOURS = 5;
     private final List<Color> palette = new ArrayList<>();
     private final List<Color> foregroundPalette = new ArrayList<>();
     private final SwingPanel panel;
@@ -65,13 +65,13 @@ public class Swing extends JFrame implements ActionListener {
             colourMenu.add(item);
         } // for
 
-        JMenu foregroundColour = new JMenu("Foreground");
+        JMenu foregroundColour = new JMenu("Shape Colour");
         menuBar.add(foregroundColour);
         for (int i = 0; i < NUMBER_OF_COLOURS; i++) {
-            String label = "Foreground " + i;
+            String label = "Shape Colour " + i;
             JMenuItem item = new JMenuItem(label);
             item.addActionListener(this);
-            item.setActionCommand(label);
+            item.setActionCommand("Foreground " + i);
             foregroundColour.add(item);
         } // for
 
@@ -84,6 +84,34 @@ public class Swing extends JFrame implements ActionListener {
             item.setActionCommand(i);
             shape.add(item);
         }
+        
+        Double[] phyOptions = {0.0,1.0,2.0,5.0,9.81,-2.0};
+        JMenu physics = new JMenu("Physics");
+        menuBar.add(physics);
+        for (Double i  : phyOptions) {
+            JMenuItem item = new JMenuItem("Gravity = " + i);
+            item.addActionListener(this);
+            item.setActionCommand("Gravity " + i);
+            physics.add(item);
+        }
+        
+        Double[] dampOptions = {0.0,1.0,3.0,-1.0,-3.0};
+        for (Double i  : dampOptions) {
+            JMenuItem item = new JMenuItem("Damping = " + i);
+            item.addActionListener(this);
+            item.setActionCommand("Damping " + i);
+            physics.add(item);
+        }
+        
+
+
+        JMenu restart = new JMenu("Restart");
+        menuBar.add(restart);
+        JMenuItem item = new JMenuItem("Restart");
+        item.addActionListener(this);
+        item.setActionCommand("Restart");
+        restart.add(item);
+
 
         this.setVisible(true);
     } // Swing()
@@ -107,6 +135,21 @@ public class Swing extends JFrame implements ActionListener {
         else if (cmd == "Square") {
             this.panel.setShape(cmd);
         } //if
+        else if (cmd == "Restart"){
+            this.panel.setCenterX(300);
+            this.panel.setCenterY(100);
+            this.panel.setDirection();
+        }
+        else if (cmd.indexOf("Gravity") >= 0){
+            String suffix = cmd.substring(7).trim();
+            double index = Double.parseDouble(suffix);
+            this.panel.setGravity(index);
+        }
+        else if (cmd.indexOf("Damping") >= 0){
+            String suffix = cmd.substring(7).trim();
+            double index = Double.parseDouble(suffix);
+            this.panel.setDamping(index);
+        }
 
     } // actionPerformed( ActionEvent )
 
