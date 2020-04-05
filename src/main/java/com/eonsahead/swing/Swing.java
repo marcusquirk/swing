@@ -13,6 +13,24 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+/**
+ * A class JFrame that controls the JPanel SwingPanel, allowing the user to
+ * change colours of a shape and its background, as well as changing the physics
+ * acting on it such as the gravitational and damping constants. The user may also
+ * choose between a circle and square and 'restart'its position and velocity. The
+ * velocity is randomly generated when the shape is initialised and is re-
+ * randomised at every restart.
+ * 
+ * I refactored the colour generation.
+ * 
+ * A potential improvement would be to refactor the creation of menus into a
+ * method, but each menu is unique enough (number and kind of sub menus and names)
+ * that I don't think such an effort is worth it yet. If I add more menus and a
+ * pattern shows itself, I will reconsider.
+ * 
+ * @author marcus
+ */
+
 public class Swing extends JFrame implements ActionListener {
 
     private final int FRAME_WIDTH = 600;
@@ -59,10 +77,13 @@ public class Swing extends JFrame implements ActionListener {
             String label = "Shape Colour " + i;
             JMenuItem item = new JMenuItem(label);
             item.addActionListener(this);
+            //The name of the command is different, so that we don't have
+            //two commands with the word 'colour' in them.
             item.setActionCommand("Foreground " + i);
             foregroundColour.add(item);
         } // for
 
+        //A menu for choosing the shape
         String[] shapes = {"Circle", "Square"};
         JMenu shape = new JMenu("Shape");
         menuBar.add(shape);
@@ -73,6 +94,8 @@ public class Swing extends JFrame implements ActionListener {
             shape.add(item);
         }
         
+        //A menu for setting the gravitational constant g. 9.81 does not appear
+        //to behave like a real object.
         Double[] phyOptions = {0.0,1.0,2.0,5.0,9.81,-2.0};
         JMenu physics = new JMenu("Physics");
         menuBar.add(physics);
@@ -83,6 +106,7 @@ public class Swing extends JFrame implements ActionListener {
             physics.add(item);
         }
         
+        //A menu for setting the damping force d.
         Double[] dampOptions = {0.0,1.0,3.0,-1.0,-3.0};
         for (Double i  : dampOptions) {
             JMenuItem item = new JMenuItem("Damping = " + i);
@@ -90,9 +114,9 @@ public class Swing extends JFrame implements ActionListener {
             item.setActionCommand("Damping " + i);
             physics.add(item);
         }
-        
 
-
+        //A menu for resetting the shape. This is needed because g and d will
+        //eventually bring the ball to rest at the bottom of the frame.
         JMenu restart = new JMenu("Restart");
         menuBar.add(restart);
         JMenuItem item = new JMenuItem("Restart");
@@ -104,6 +128,11 @@ public class Swing extends JFrame implements ActionListener {
         this.setVisible(true);
     } // Swing()
     
+    /**
+     * Create a list of random colours.
+     * @param rng The already-initialised random number generator.
+     * @param palette The list of colours to be filled up.
+     */
     public void randomColours(Random rng, List<Color> palette){
         for (int i = 0; i < NUMBER_OF_COLOURS; i++) {
             int red = 64 + rng.nextInt(128);
