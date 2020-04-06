@@ -48,8 +48,8 @@ public class SwingPanel extends JPanel implements ActionListener {
     public SwingPanel() {
         Timer timer = new Timer(30, this);
         timer.start();
-        direction[0] = -7.142/300 + (rng.nextDouble() / 20);
-        direction[1] = -7.142/300 + (rng.nextDouble() / 20);
+        direction[0] = -7.142 / 300 + (rng.nextDouble() / 20);
+        direction[1] = -7.142 / 300 + (rng.nextDouble() / 20);
     } // SwingPanel()
 
     public double getCenterX() {
@@ -93,8 +93,8 @@ public class SwingPanel extends JPanel implements ActionListener {
      * components.
      */
     public void setDirection() {
-        direction[0] = -7.142/300 + (rng.nextDouble() / 20);
-        direction[1] = -7.142/300 + (rng.nextDouble() / 20);
+        direction[0] = -7.142 / 300 + (rng.nextDouble() / 20);
+        direction[1] = -7.142 / 300 + (rng.nextDouble() / 20);
     }
 
     /**
@@ -103,7 +103,7 @@ public class SwingPanel extends JPanel implements ActionListener {
      * @param g The chosen gravitational constant.
      */
     public void setGravity(double g) {
-        gravity = g/300;
+        gravity = g / 300;
     }
 
     /**
@@ -112,7 +112,7 @@ public class SwingPanel extends JPanel implements ActionListener {
      * @param d The chosen damping constant.
      */
     public void setDamping(double d) {
-        damping = d/300;
+        damping = d / 300;
     }
 
     @Override
@@ -124,18 +124,17 @@ public class SwingPanel extends JPanel implements ActionListener {
         int h = this.getHeight();
 
         AffineTransform transform = new AffineTransform();
-        
+
         /*
         This code creates a -1 to 1 x-y coordinate system. Should you choose to
         re-implement it, all of the initial variables such as centerX, centerY,
         direction, and g must all be changed to more suitable values (likely
         very small, around 0.0-0.2)
          */
-        
         AffineTransform scaling = new AffineTransform();
         scaling.setToScale(w / 2, h / 2);
         AffineTransform translation = new AffineTransform();
-        translation.setToTranslation(1.0 + this.centerX, 1.0 + this.centerY);
+        translation.setToTranslation(1.0, 1.0);
 
         transform.concatenate(scaling);
         transform.concatenate(translation);
@@ -154,9 +153,6 @@ public class SwingPanel extends JPanel implements ActionListener {
             rotationAngle += rotationSpeed;
             Rectangle2D.Double square = new Rectangle2D.Double(centerX, centerY,
                     radius, radius);
-//            Shape shape = transform.createTransformedShape(square);
-//            g2D.setColor(colour);
-//            g2D.fill(shape);
             AffineTransform at = AffineTransform.getRotateInstance(rotationAngle, centerX, centerY);
             Shape shape = at.createTransformedShape(square);
             shape = transform.createTransformedShape(shape);
@@ -171,10 +167,14 @@ public class SwingPanel extends JPanel implements ActionListener {
         // Each time tick, the shape moves in the direction set.
         this.centerY = this.centerY + (direction[0]);
         this.centerX = this.centerX + (direction[1]);
-        
+
         //These describe situations for the shape to bounce off of a boundary
-        if (Math.abs(this.centerY) > 0.5) {
-//            centerY = 600 - 4 * radius;
+        if (Math.abs(this.centerY) > 0.9) {
+            if (this.centerY > 0.9) {
+                this.centerY = 0.89;
+            } else {
+                this.centerY = -0.89;
+            }
             direction[0] = -direction[0] + damping; //bounce
             rotationSpeed = -rotationSpeed;
         } // if
@@ -183,14 +183,19 @@ public class SwingPanel extends JPanel implements ActionListener {
 //            direction[0] = -direction[0];
 //            rotationSpeed = -rotationSpeed;
 //        } // if
-        if (Math.abs(this.centerX) > 0.5) {
-//            centerX = 600 - radius;
+        if (this.centerX > 0.9) {
+            this.centerX = 0.89;
             direction[1] = -direction[1];
             rotationSpeed = -rotationSpeed;
 //        } else if (this.centerX < 0) {
 //            centerX = 0;
 //            direction[1] = -direction[1];
 //            rotationSpeed = -rotationSpeed;
+        }
+        else if (this.centerX < -1.0){
+            this.centerX = -0.99;
+            direction[1] = -direction[1];
+            rotationSpeed = -rotationSpeed;
         }
         direction[0] += gravity / 2; // each time tick, apply the g force
         this.repaint();
