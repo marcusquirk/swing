@@ -163,8 +163,8 @@ public class Swing extends JFrame implements ActionListener {
             this.panel.setShape(cmd);
         } //if
         else if (cmd == "Restart"){
-            this.panel.setCenterX(300);
-            this.panel.setCenterY(100);
+            this.panel.setCenterX(0.0);
+            this.panel.setCenterY(-0.5);
             this.panel.setDirection();
         }
         else if (cmd.indexOf("Gravity") >= 0){
